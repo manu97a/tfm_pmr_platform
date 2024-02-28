@@ -22,18 +22,25 @@ const ListaSensores = () => {
   }, []);
   const handleEliminarSensor = async (id) => {
     try {
-        await fetch(`api/sensores/${id}`,{
-            method:"DELETE",
-        })
-        window.location.reload()
+      await fetch(`api/sensores/${id}`, {
+        method: "DELETE",
+      });
+      window.location.reload();
     } catch (error) {
-        console.log("Error al eliminar el sensor", error)
-        
+      console.log("Error al eliminar el sensor", error);
     }
-  }
+  };
   return (
     <div className="container mx-auto rounded-xl m-8 text-center w-full bg-blue-600 text-white font-light p-8">
       <h3 className="text-3xl py-5">Lista de sensores</h3>
+      <div className="container mx-auto text-center p-8">
+        <Link
+          href="/AgregarSensores"
+          className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+          Agregar nuevo sensor
+        </Link>
+      </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
         {sensores.map((sensor, index) => (
           <div
@@ -46,18 +53,20 @@ const ListaSensores = () => {
                 src="/docs/images/people/profile-picture-3.jpg"
                 alt="Bonnie image"
               />
-              <h5 className="mb-1 text-xl font-medium text-gray-900">{sensor.name}</h5>
+              <h5 className="mb-1 text-xl font-medium text-gray-900">
+                {sensor.name}
+              </h5>
               <span className="text-sm text-gray-500">Zona: {sensor.zone}</span>
               <div className="flex mt-4 md:mt-6">
                 <Link
-                  href="/EditarSensor"
+                  href={`/EditarSensor/${sensor._id}`} 
                   className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
                 >
                   Editar
                 </Link>
 
                 <button
-                  onClick={()=> handleEliminarSensor(sensor._id)}
+                  onClick={() => handleEliminarSensor(sensor._id)}
                   className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                 >
                   Eliminar
