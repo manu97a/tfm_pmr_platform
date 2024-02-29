@@ -1,5 +1,18 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
+
+## This project uses a MONGODB database for this: 
+
+First you have to create a .env.local file in the root of the project  and add your MongoDB connection string you can use a variable like: 
+
+URIMONGO=mongodb+srv://dashboard......... 
+
+This file its not uploaded for this repository.
+
+After this you can  run the application with 
+```bash 
+npm start
+```
 ## Getting Started
 
 First, run the development server:
