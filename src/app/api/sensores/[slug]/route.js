@@ -1,7 +1,8 @@
+import { MongoClient } from "mongodb";
 import Sensor from "../../../../../models/Sensor";
 import conexionDB from "../../../../../lib/dbConnect";
 import { NextResponse } from "next/server";
-
+const client = new MongoClient(process.env.URIMONGO);
 // Peticion para encontrar un sensor en especifico COMPLETADA
 export async function GET(req, { params }) {
   const { slug } = params;
@@ -37,6 +38,10 @@ export async function PATCH(req, { params }) {
     const { slug } = params;
     const updatedData = await req.json();
     console.log("Sensor to PATCH: ", slug);
+    const sensorAntiguo = await Sensor.findById({ _id: slug });
+    if (updatedData.name !== sensorAntiguo.name) {
+      await actualizarDatos(sensorAntiguo.name, updatedData.name);
+    }
     const sensor = await Sensor.findByIdAndUpdate({ _id: slug }, updatedData, {
       new: true,
     });
@@ -47,5 +52,29 @@ export async function PATCH(req, { params }) {
   } catch (error) {
     console.log(error);
     throw new Error("Failed to delete sensor");
+  }
+}
+async function actualizarDatos(nombreAntiguo, nombreNuevo) {
+  try {
+    await client.connect();
+    const db = client.db("platformtfm");
+    const collection = db.collection("simulation");
+    const query = {};
+    query[`Sensores.${nombreAntiguo}`] = { $exists: true };
+    const datos = await collection.find(query).toArray();
+    for (const dato of datos) {
+      const updateQuery = {
+        $set: {
+          [`Sensores.${nombreNuevo}`]: dato.Sensores[nombreAntiguo]
+        },
+        $unset: {
+          [`Sensores.${nombreAntiguo}`]: ""
+        }
+      };
+      await collection.updateOne({ _id: dato._id }, updateQuery);
+    }
+  } catch (error) {
+    console.error("Error al actualizar documentos relacionados:", error);
+    throw error;
   }
 }

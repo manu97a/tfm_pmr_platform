@@ -1,8 +1,35 @@
-import React from "react";
+"use client";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import MQTTSuscriber from "./MQTTSuscriber";
-
+// import MQTTSuscriber from "./MQTTSuscriber";
+import mqtt from "mqtt";
 const PulsoCard = () => {
+  const [pulso, setPulso] = useState([]);
+  const [fecha, setFecha] = useState([]);
+  const [hora, setHora] = useState([]);
+  useEffect(() => {
+    const client = mqtt.connect("ws://test.mosquitto.org:8080/mqtt");
+    client.on("connect", () => {
+      console.log("Obteniendo estado de dispositivos");
+      client.subscribe("TFM_Salud");
+      client.subscribe("TFM_Tiempo");
+    });
+    client.on("message", (topic, message) => {
+      if (topic === "TFM_Salud") {
+        let messageString = message.toString();
+        const parsedMessage = JSON.parse(messageString);
+        setPulso(parsedMessage.pulso);
+      } else if (topic === "TFM_Tiempo") {
+        let messageString = message.toString();
+        const [fecha, hora] = messageString.split(" ");
+        setFecha(fecha);
+        setHora(hora);
+      }
+    });
+    return () => {
+      client.end();
+    };
+  }, []);
   return (
     <div className="bg-white border border-red-200 rounded-lg shadow flex flex-col justify-between font-light">
       <div className="w-full h-full flex items-center justify-center">
@@ -16,13 +43,17 @@ const PulsoCard = () => {
         <div className="mb-8">
           <p className="text-xl text-red-600">Pulso</p>
           <div className="text-gray-900 font-light text-lg mb-2 hover:text-red-600 inline-block">
-            <div className="flex">
-              <p className="mr-1 text-red-600">Hora: </p>
-              <MQTTSuscriber topic={"datos_basicos"} infoToShow={"hora"} />
+            <div className="flex flex-col">
+              <p className="mr-1 text-red-600">
+                Fecha: <span className="text-black">{fecha}</span>{" "}
+              </p>
+
+              <p className="text-red-600">Hora: <span className="text-black">{hora}</span></p>
+
             </div>
             <div className="flex">
-              <p className="mr-1 text-red-600">Último valor: </p>
-              <MQTTSuscriber topic={"datos_basicos"} infoToShow={"pulso"} />
+           
+              <p className="mr-1 text-red-600">Último valor: <span className="text-black">{pulso}</span> </p>
             </div>
           </div>
           <div className="text-gray-700 text-sm">

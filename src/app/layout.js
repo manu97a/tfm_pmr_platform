@@ -10,11 +10,7 @@ import {
   ClipboardList,
   FilePenLine,
   NotepadText,
-  Layers,
-  Flag,
-  Calendar,
-  LifeBuoy,
-  Settings,
+  FileLineChart,
   Lightbulb,
 } from "lucide-react";
 import SideBar, { SidebarItem } from "@/components/SideBar";
@@ -89,6 +85,22 @@ export default function RootLayout({ children }) {
              icon={<NotepadText size={20} />}
              link={"/ReporteAlertas"}
              text="Reporte de alertas"
+           ></SidebarItem>
+           
+           <SidebarItem
+             icon={<FileLineChart size={20} />}
+             link={"/PulsoDetalle"}
+             text="Eventos de Pulso"
+           ></SidebarItem>
+           <SidebarItem
+             icon={<FileLineChart size={20} />}
+             link={"/SaturacionDetalle"}
+             text="Eventos de Saturacion"
+           ></SidebarItem>
+           <SidebarItem
+             icon={<FileLineChart size={20} />}
+             link={"/AcelerometroDetalle"}
+             text="Eventos del Acelerometro"
            ></SidebarItem>
 
             {/* <SidebarItem icon={<StickyNote size={20} />} text="Projects" alert />

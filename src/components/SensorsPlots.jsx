@@ -14,12 +14,15 @@ const SensorsPlots = () => {
           method: "GET",
         });
         const simulateddata = await response.json();
+        // Nombres de sensores =
+        const responseNames = await fetch("api/sensores/alerts", {
+          method: "GET",
+        });
+        const data = await responseNames.json();
         if (!sensorID.length) {
-          const nombres = simulateddata.map((sensor) =>
-            Object.keys(sensor.value)
-          );
+          const nombres = data.map(sensor => sensor.name)
 
-          setSensorID(nombres[0]);
+          setSensorID(nombres);
           setSensorSimulated(simulateddata);
           setRenderGrafica(true);
           console.log("Data simulada obtenida correctamente");
@@ -32,27 +35,24 @@ const SensorsPlots = () => {
   }, []);
 
   return (
-      <div className="w-full h-full">
-        {sensorSimulated !== null &&
-          sensorID !== null && // Only render if sensor names are available
-          sensorID.map((name, index) => (
-            <div
-              key={index}
-              className="mx-auto mb-10 bg-white border border-blue-600 rounded-lg shadow"
-            >
-              <div className="flex flex-col">
-                
-                <div className="mx-auto">
-                  {renderGrafica && (
-                    <Grafica sensorName={name} sensorData={sensorSimulated} />
-                  )}
-                </div>
+    <div className="w-full h-full">
+      {sensorSimulated !== null &&
+        sensorID !== null && // Only render if sensor names are available
+        sensorID.map((name, index) => (
+          <div
+            key={index}
+            className="mx-auto mb-10 bg-white border border-blue-600 rounded-lg shadow"
+          >
+            <div className="flex flex-col">
+              <div className="mx-auto">
+                {renderGrafica && (
+                  <Grafica sensorName={name}  />
+                )}
               </div>
             </div>
-          ))}
-      </div>
-
-   
+          </div>
+        ))}
+    </div>
   );
 };
 
