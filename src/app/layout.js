@@ -9,11 +9,13 @@ import {
   PlusSquare,
   ClipboardList,
   FilePenLine,
+  NotepadText,
   Layers,
   Flag,
   Calendar,
   LifeBuoy,
   Settings,
+  Lightbulb,
 } from "lucide-react";
 import SideBar, { SidebarItem } from "@/components/SideBar";
 import Header from "@/components/Header";
@@ -67,6 +69,28 @@ export default function RootLayout({ children }) {
               link={"/AgregarActuador"}
               text="Agregar Actuadores"
             ></SidebarItem>
+           <SidebarItem
+              icon={<Lightbulb size={20} />}
+              link={"/AgregarLuz"}
+              text="Agregar Luces"
+            ></SidebarItem>
+            <SidebarItem
+             icon={<ClipboardList size={20} />}
+             link={"/ListaLuces"}
+             text="Lista de Luces"
+           ></SidebarItem>
+           <SidebarItem
+             icon={<Activity size={20} />}
+             link={"/GraficaSensores"}
+             text="Sensores simulados"
+           ></SidebarItem>
+           
+           <SidebarItem
+             icon={<NotepadText size={20} />}
+             link={"/ReporteAlertas"}
+             text="Reporte de alertas"
+           ></SidebarItem>
+
             {/* <SidebarItem icon={<StickyNote size={20} />} text="Projects" alert />
           <SidebarItem icon={<Calendar size={20} />} text="Calendar" />
           <SidebarItem icon={<Layers size={20} />} text="Tasks" />

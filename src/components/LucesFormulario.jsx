@@ -1,14 +1,11 @@
 "use client";
-import { data } from "autoprefixer";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-const SensorFormulario = () => {
+
+const LucesFormulario = () => {
   const router = useRouter();
   const [form, setForm] = useState({
     name: "",
-    minValue: "",
-    maxValue: "",
-    umbral: "",
     zone: "",
   });
   // Mensaje de verificacion
@@ -29,7 +26,7 @@ const SensorFormulario = () => {
   const postData = async (form) => {
     try {
       console.log(form);
-      const response = await fetch("/api/sensores", {
+      const response = await fetch("/api/luces", {
         method: "POST",
         headers: {
           "Content-type": "application/json",
@@ -37,16 +34,15 @@ const SensorFormulario = () => {
         body: JSON.stringify(form),
       });
       if (!response.ok) {
-        throw new Error("ERROR al agregar sensor");
+        throw new Error("ERROR al agregar esta Luz");
       }
-      const dataSensor = await response.json();
-      console.log(dataSensor);
-      setMessage(`Se ha registrado el sensor correctamente`);
-
-      router.push("/ListaSensores");
+      const dataLuz = await response.json();
+      console.log(dataLuz);
+      setMessage(`Se ha registrado la luz correctamente`);
+      router.push("/ListaLuces");
     } catch (error) {
       console.log(error);
-      setMessage(`Ocurrió un error al agregar el sensor `);
+      setMessage(`Ocurrió un error al agregar esta luz `);
     }
   };
   return (
@@ -54,12 +50,12 @@ const SensorFormulario = () => {
       <form onSubmit={handleSubmit}>
         <div className="p-3 mb-3">
           <label className="block text-blue-600 text-xl font-light mb-2">
-            Nombre del Sensor
+            Nombre de la luz a agregar
           </label>
           <input
             type="text"
             className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-            placeholder="s_humo"
+            placeholder="Luz cocina"
             name="name"
             autoComplete="off"
             value={form.name}
@@ -67,56 +63,10 @@ const SensorFormulario = () => {
             required
           />
         </div>
-
-        <div className="p-3 mb-8">
-          <label className="block text-blue-600 text-xl font-light mb-2">
-            Valor Mínimo
-          </label>
-          <input
-            type="number"
-            className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-            placeholder="0"
-            name="minValue"
-            autoComplete="off"
-            value={form.minValue}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="p-3 mb-8">
-          <label className="block text-blue-600 text-xl font-light mb-2">
-            Valor Máximo
-          </label>
-          <input
-            type="number"
-            className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-            placeholder="100"
-            name="maxValue"
-            autoComplete="off"
-            value={form.maxValue}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div className="p-3 mb-8">
-          <label className="block text-blue-600 text-xl font-light mb-2">
-            Umbral
-          </label>
-          <input
-            type="number"
-            className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-            placeholder="70"
-            name="umbral"
-            autoComplete="off"
-            value={form.umbral}
-            onChange={handleChange}
-            required
-          />
-        </div>
         {validate && <p className="text-red-500 font-bold">{validate}</p>}
         <div className="p-3 mb-8">
           <h3 className="block text-blue-600 text-xl font-light mb-2">
-            Ubicación del sensor
+            Ubicación de la luz
           </h3>
           <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
             <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
@@ -247,7 +197,7 @@ const SensorFormulario = () => {
           type="submit"
           className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
         >
-          Agregar Sensor
+          Agregar Luz
         </button>
         <p className="text-red-500">{message}</p>
       </form>
@@ -255,4 +205,4 @@ const SensorFormulario = () => {
   );
 };
 
-export default SensorFormulario;
+export default LucesFormulario;

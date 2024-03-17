@@ -13,6 +13,10 @@ const SensorSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  umbral: {
+    type: Number,
+    required: true,
+  },
   zone: {
     type: String,
     required: true,

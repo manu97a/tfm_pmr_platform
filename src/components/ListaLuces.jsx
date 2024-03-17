@@ -1,75 +1,78 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
-import { PiPowerFill } from "react-icons/pi";
 import mqtt from "mqtt";
-const ListaActuadores = () => {
+
+import { LuLightbulb, LuLightbulbOff } from "react-icons/lu";
+
+const ListaLuces = () => {
   const [loading, setLoading] = useState(true);
-  const [actuadores, setActuadores] = useState([]);
-  const [actuadoresMQTT, setActuadoresMQTT] = useState([]);
+  const [luces, setLuces] = useState([]);
+  const [lucesMQTT, setLucesMQTT] = useState([]);
 
   useEffect(() => {
-    const fetchActuadores = async () => {
+    const fetchLuces = async () => {
       try {
-        const response = await fetch("api/actuadores", {
+        const response = await fetch("api/luces", {
           method: "GET",
         });
         const data = await response.json();
-        setActuadores(data);
+        setLuces(data);
         setLoading(false);
       } catch (error) {
-        console.log("Error al obtener todos los actuadores", error);
+        console.log("Error al obtener todas las luces", error);
       }
     };
-    fetchActuadores();
+    fetchLuces();
   }, []);
-  const handleEliminarActuador = async (id) => {
+  const handleEliminarLuz = async (id) => {
     try {
-      await fetch(`api/actuadores/${id}`, {
+      await fetch(`api/luces/${id}`, {
         method: "DELETE",
       });
       window.location.reload();
     } catch (error) {
-      console.log("Error al eliminar el actuador", error);
+      console.log("Error al eliminar la luz", error);
     }
   };
   useEffect(() => {
     const client = mqtt.connect("ws://test.mosquitto.org:8080/mqtt");
     client.on("connect", () => {
       console.log("Obteniendo estado de dispositivos");
-      client.subscribe("TFM_actuadores");
+      client.subscribe("TFM_luces");
     });
     client.on("message", (topic, message) => {
       let messageString = message.toString();
       messageString = messageString.replace(/'/g, '"');
       const parsedMessage = JSON.parse(messageString);
-      console.log("Estado Actuadores recibidos:", parsedMessage); // Registrar los datos recibidos
-      setActuadoresMQTT(parsedMessage);
+      console.log("Estado Luces recibidos:", parsedMessage);
+      setLucesMQTT(parsedMessage);
     });
     return () => {
       client.end();
     };
   }, []);
-  const handleToggle = (nombreActuador, valorActual) => {
+  const handleToggle = (nombreLuz, valorActual) => {
     const client = mqtt.connect("ws://test.mosquitto.org:8080/mqtt");
     client.on("connect", () => {
-      client.subscribe("TFM_actuadores");
+      client.subscribe("TFM_luces");
     });
     if (valorActual == 0) {
       const estado = 1;
       const actualidad = JSON.stringify({
-        ...actuadoresMQTT,
-        [nombreActuador]: estado,
+        ...lucesMQTT,
+        [nombreLuz]: estado,
       });
-      client.publish("TFM_actuadores", actualidad);
+      client.publish("TFM_luces", actualidad);
       console.log(actualidad);
     } else {
       const estado = 0;
       const actualidad = JSON.stringify({
-        ...actuadoresMQTT,
-        [nombreActuador]: estado,
+        ...lucesMQTT,
+        [nombreLuz]: estado,
       });
-      client.publish("TFM_actuadores", actualidad);
+      client.publish("TFM_luces", actualidad);
       console.log(actualidad);
     }
   };
@@ -77,9 +80,9 @@ const ListaActuadores = () => {
   const getIcon = (value) => {
     if (typeof value === "number" && !isNaN(value)) {
       return value === 1 ? (
-        <PiPowerFill size={70} className="text-[#228B22]" />
+        <LuLightbulb size={70} className="text-[#228B22]" />
       ) : (
-        <PiPowerFill size={70} className="text-red-500" />
+        <LuLightbulbOff size={70} className="text-red-500" />
       );
     } else {
       return (
@@ -108,7 +111,7 @@ const ListaActuadores = () => {
   return (
     <div className="container max-w-full mx-auto text-center">
       <h2 className="text-center font-light text-xl p-8 text-blue-500">
-        Lista de Actuadores
+        Lista de Luces
       </h2>
       {loading && (
         <div class="text-center">
@@ -136,13 +139,13 @@ const ListaActuadores = () => {
       {!loading && (
         <>
           <Link
-            href="/AgregarActuador"
+            href="/AgregarLuz"
             className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
           >
-            Agregar nuevo actuador
+            Agregar nueva Luz
           </Link>
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-8 place-items-center">
-            {actuadores.map((actuador, index) => (
+            {luces.map((luz, index) => (
               <div
                 key={index}
                 className={`w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow`}
@@ -151,28 +154,26 @@ const ListaActuadores = () => {
                 <div className="flex flex-col items-center p-8">
                   <p
                     className="p-8 cursor-pointer"
-                    onClick={() =>
-                      handleToggle(actuador.name, actuadoresMQTT[actuador.name])
-                    }
+                    onClick={() => handleToggle(luz.name, lucesMQTT[luz.name])}
                   >
-                    {getIcon(actuadoresMQTT[actuador.name])}
+                    {getIcon(lucesMQTT[luz.name])}
                   </p>
-                  <h3 className="text-black">{actuador.name}</h3>
+                  <h3 className="text-black">{luz.name}</h3>
 
                   <h3 className="text-black">
                     Ubicación:{" "}
-                    <span class="text-sm text-gray-500">{actuador.zone}</span>
+                    <span class="text-sm text-gray-500">{luz.zone}</span>
                   </h3>
                   <div className="flex mt-4 md:mt-6">
                     <Link
-                      href={`/EditarActuador/${actuador._id}`}
+                      href={`/EditarLuz/${luz._id}`}
                       className="inline-flex items-center px-4 py-2 text-sm font-medium text-center text-white bg-blue-700 rounded-lg hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
                     >
                       Editar
                     </Link>
 
                     <button
-                      onClick={() => handleEliminarActuador(actuador._id)}
+                      onClick={() => handleEliminarLuz(luz._id)}
                       className="py-2 px-4 ms-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100"
                     >
                       Eliminar
@@ -188,4 +189,4 @@ const ListaActuadores = () => {
   );
 };
 
-export default ListaActuadores;
+export default ListaLuces;

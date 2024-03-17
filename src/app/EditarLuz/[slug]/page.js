@@ -1,16 +1,12 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-const EditarSensor = ({ params }) => {
+const EditarLuz = ({ params }) => {
   const router = useRouter();
   const { slug } = params;
   const [dataActual, setDataActual] = useState({});
   const [formData, setFormData] = useState({
     name: "",
-    minValue: "",
-    maxValue: "",
-    umbral: "",
     zone: "",
   });
   const [message, setMessage] = useState("");
@@ -22,21 +18,21 @@ const EditarSensor = ({ params }) => {
     });
   };
   useEffect(() => {
-    const infoSensor = async () => {
+    const infoLuces = async () => {
       try {
-        const response = await fetch(`/api/sensores/${slug}`, {
+        const response = await fetch(`/api/luces/${slug}`, {
           method: "GET",
         });
         if (!response.ok) {
-          throw new Error("No se pudo obtener el dato");
+          throw new Error("No se pudo obtener la luz");
         }
         const data = await response.json();
         setDataActual(data);
       } catch (error) {
-        console.log("Error al obtener este sensor", error);
+        console.log("Error al obtener esta luz", error);
       }
     };
-    infoSensor();
+    infoLuces();
   }, [slug]);
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -45,7 +41,7 @@ const EditarSensor = ({ params }) => {
   const patchData = async (form) => {
     try {
       console.log(form);
-      const response = await fetch(`/api/sensores/${slug}`, {
+      const response = await fetch(`/api/luces/${slug}`, {
         method: "PATCH",
         headers: {
           "Content-type": "application/json",
@@ -53,52 +49,34 @@ const EditarSensor = ({ params }) => {
         body: JSON.stringify(form),
       });
       if (!response.ok) {
-        throw new Error("ERROR al agregar sensor");
+        throw new Error("ERROR al editar esta luz");
       }
       const data = await response.json();
       console.log(data);
-      setMessage(`Sensor editado correctamente`);
-      router.push("/ListaSensores");
+      setMessage(`Luz editada correctamente`);
+      router.push("/ListaLuces");
     } catch (error) {
       console.log(error);
-      setMessage(`Ocurrió un error al editar el sensor `);
+      setMessage(`Ocurrió un error al editar la luz `);
     }
   };
-  
   return (
     <>
       <div className="container max-w-full mx-auto text-center bg-gray-50">
         <h3 className="text-blue-700 text-2xl p-5">
-          Datos actuales del sensor
+          Datos actuales de la luz
         </h3>
-        <div className="grid lg:grid-cols-4 gap-4 p-5 md:grid-cols-2 sm:grid-cols-1">
+        <div className="grid lg:grid-cols-2 gap-4 p-5 md:grid-cols-2 sm:grid-cols-1">
           <div className="bg-gray-50 rounded-xl border border-blue-700">
             <p className="p-8">
-              Nombre del sensor:{" "}
+              Nombre de la luz:{" "}
               <span className="font-bold ml-3">{dataActual.name}</span>
             </p>
           </div>
           <div className="bg-gray-50 rounded-xl border border-blue-700">
             <p className="p-8">
-              Valor mínimo:{" "}
-              <span className="font-bold ml-3">{dataActual.minValue}</span>
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-xl border border-blue-700">
-            <p className="p-8">
-              Valor máximo:{" "}
-              <span className="font-bold ml-3">{dataActual.maxValue}</span>
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-xl border border-blue-700">
-            <p className="p-8">
-              Umbral:{" "}
-              <span className="font-bold ml-3">{dataActual.umbral}</span>
-            </p>
-          </div>
-          <div className="bg-gray-50 rounded-xl border border-blue-700">
-            <p className="p-8">
-              Ubicación: <span className="font-bold ml-3">{dataActual.zone}</span>
+              Ubicación de la luz:{" "}
+              <span className="font-bold ml-3">{dataActual.zone}</span>
             </p>
           </div>
         </div>
@@ -107,12 +85,12 @@ const EditarSensor = ({ params }) => {
           <form onSubmit={handleSubmit}>
             <div className="p-3 mb-3">
               <label className="block text-blue-600 text-xl font-light mb-2">
-                Nombre del Sensor
+                Nombre de la luz
               </label>
               <input
                 type="text"
                 className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-                placeholder="s_humo"
+                placeholder="LamparaCocina"
                 name="name"
                 autoComplete="off"
                 value={formData.name}
@@ -120,56 +98,9 @@ const EditarSensor = ({ params }) => {
                 required
               />
             </div>
-
-            <div className="p-3 mb-8">
-              <label className="block text-blue-600 text-xl font-light mb-2">
-                Valor Mínimo
-              </label>
-              <input
-                type="number"
-                className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-                placeholder="0"
-                name="minValue"
-                autoComplete="off"
-                value={formData.minValue}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="p-3 mb-8">
-              <label className="block text-blue-600 text-xl font-light mb-2">
-                Valor Máximo
-              </label>
-              <input
-                type="number"
-                className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-                placeholder="100"
-                name="maxValue"
-                autoComplete="off"
-                value={formData.maxValue}
-                onChange={handleChange}
-                required
-              />
-            </div>
-            <div className="p-3 mb-8">
-              <label className="block text-blue-600 text-xl font-light mb-2">
-                Umbral
-              </label>
-              <input
-                type="number"
-                className="w-[300px] px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500 bg-blue-50 font-light text-black"
-                placeholder="85"
-                name="umbral"
-                autoComplete="off"
-                value={formData.umbral}
-                onChange={handleChange}
-                required
-              />
-            </div>
-
             <div className="p-3 mb-8">
               <h3 className="block text-blue-600 text-xl font-light mb-2">
-                Ubicación del sensor
+                Ubicación de la luz
               </h3>
               <ul className="items-center w-full text-sm font-medium text-gray-900 bg-white border border-gray-200 rounded-lg sm:flex dark:bg-gray-700 dark:border-gray-600 dark:text-white">
                 <li className="w-full border-b border-gray-200 sm:border-b-0 sm:border-r dark:border-gray-600">
@@ -300,7 +231,7 @@ const EditarSensor = ({ params }) => {
               type="submit"
               className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
             >
-              Editar Sensor
+              Editar Luz
             </button>
             <p className="text-red-500">{message}</p>
           </form>
@@ -310,4 +241,4 @@ const EditarSensor = ({ params }) => {
   );
 };
 
-export default EditarSensor;
+export default EditarLuz;
