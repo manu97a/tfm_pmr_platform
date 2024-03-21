@@ -4,9 +4,27 @@ import { useRouter } from "next/navigation";
 
 const ActuadorFormulario = () => {
   const router = useRouter();
+  const [imgCoords, setImgCoords] = React.useState(0);
+  const [clickedCoords, setClickedCoords] = React.useState(null);
+
+  const [coordenadas, setCoordenadas] = useState({ x: null, y: null });
+  const imageWidth = 800;
+  const imageHeight = 700;
+  const handleClick = (event) => {
+    const boundingRect = event.target.getBoundingClientRect();
+    // Obtener las coordenadas del clic
+    const x = event.clientX - boundingRect.left;
+    const y = event.clientY - boundingRect.top;
+
+    // Actualizar el estado con las coordenadas
+    setCoordenadas({ x, y });
+    setForm({ ...form, xcoordinate: x, ycoordinate: y });
+  };
   const [form, setForm] = useState({
     name: "",
     zone: "",
+    xcoordinate: "",
+    ycoordinate: "",
   });
   // Mensaje de verificacion
   const [message, setMessage] = useState("");
@@ -19,7 +37,7 @@ const ActuadorFormulario = () => {
       [name]: value,
     });
   };
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     postData(form);
   };
@@ -40,7 +58,7 @@ const ActuadorFormulario = () => {
       console.log(dataSensor);
       setMessage(`Se ha registrado el actuador correctamente`);
 
-      router.push("/");
+      router.push("/ListaActuadores");
     } catch (error) {
       console.log(error);
       setMessage(`Ocurrió un error al agregar el actuador `);
@@ -193,7 +211,41 @@ const ActuadorFormulario = () => {
             </li>
           </ul>
         </div>
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <img
+            src="/planocasa.png"
+            alt="Imagen"
+            onClick={handleClick}
+            style={{
+              cursor: "crosshair",
+              width: imageWidth,
+              height: imageHeight,
+            }} // Cambiar el cursor para indicar que es clickeable
+          />
+          {coordenadas.x !== null && coordenadas.y !== null && (
+            <div
+              style={{
+                position: "absolute",
+                left: coordenadas.x, // Ajusta el desplazamiento para que el círculo esté centrado
+                top: coordenadas.y, // Ajusta el desplazamiento para que el círculo esté centrado
+                width: "10px",
+                height: "10px",
+                borderRadius: "50%",
+                backgroundColor: "red",
+                zIndex: 999, // Asegura que el círculo esté por encima de la imagen
+              }}
+            />
+          )}
+          
+        </div>
 
+        <div className="p-8 mt-5 text-blue-600">
+          <p className="font-bold">
+            {" "}
+            Coordenadas:
+            {form.xcoordinate}, {form.ycoordinate}
+          </p>
+        </div>
         <button
           type="submit"
           className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"

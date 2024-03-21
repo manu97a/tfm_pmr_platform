@@ -1,7 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
 const SensorSchema = new mongoose.Schema({
-  name:{
+  name: {
     type: String,
     required: true,
   },
@@ -21,5 +21,13 @@ const SensorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  xcoordinate: {
+    type: Number,
+    required: true,
+  },
+  ycoordinate: {
+    type: Number,
+    required: true,
+  },
 });
-export default mongoose.models.Sensor || mongoose.model('Sensor', SensorSchema);
+export default mongoose.models.Sensor || mongoose.model("Sensor", SensorSchema);

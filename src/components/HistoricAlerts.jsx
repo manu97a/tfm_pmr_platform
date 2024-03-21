@@ -5,7 +5,7 @@ const HistoricAlerts = ({ datos, sensorName }) => {
   return (
     <div className="p-8">
       <p className="mb-10 ms-6  m-2 text-red-500">Reporte de alertas</p>
-      <ol className="relative border-red-500">
+      <ol className="relative border-red-500 h-64 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-gray-100">
         {datos.map((dato, index) => (
           <li className="mb-10 ms-6" key={index}>
             <div className="items-center justify-between p-4 bg-white border border-red-600 rounded-lg shadow-sm sm:flex">

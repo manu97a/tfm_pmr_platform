@@ -1,7 +1,7 @@
 import mongoose, { mongo } from "mongoose";
 
 const ActuadorSchema = new mongoose.Schema({
-  name:{
+  name: {
     type: String,
     required: true,
   },
@@ -9,6 +9,14 @@ const ActuadorSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  
+  xcoordinate: {
+    type: Number,
+    required: true,
+  },
+  ycoordinate: {
+    type: Number,
+    required: true,
+  },
 });
-export default mongoose.models.Actuador || mongoose.model('Actuador', ActuadorSchema);
+export default mongoose.models.Actuador ||
+  mongoose.model("Actuador", ActuadorSchema);

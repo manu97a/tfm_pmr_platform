@@ -8,7 +8,7 @@ import {
   Frown,
   PlusSquare,
   ClipboardList,
-  FilePenLine,
+  MapPin,
   NotepadText,
   FileLineChart,
   Lightbulb,
@@ -80,13 +80,6 @@ export default function RootLayout({ children }) {
              link={"/GraficaSensores"}
              text="Sensores simulados"
            ></SidebarItem>
-           
-           <SidebarItem
-             icon={<NotepadText size={20} />}
-             link={"/ReporteAlertas"}
-             text="Reporte de alertas"
-           ></SidebarItem>
-           
            <SidebarItem
              icon={<FileLineChart size={20} />}
              link={"/PulsoDetalle"}
@@ -101,6 +94,11 @@ export default function RootLayout({ children }) {
              icon={<FileLineChart size={20} />}
              link={"/AcelerometroDetalle"}
              text="Eventos del Acelerometro"
+           ></SidebarItem>
+           <SidebarItem
+             icon={<MapPin size={20} />}
+             link={"/Mapa"}
+             text="Ubicación dispositivos"
            ></SidebarItem>
 
             {/* <SidebarItem icon={<StickyNote size={20} />} text="Projects" alert />

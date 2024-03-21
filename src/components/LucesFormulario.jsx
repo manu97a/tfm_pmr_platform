@@ -1,13 +1,29 @@
 "use client";
 import React, { useState } from "react";
 import { useRouter } from "next/navigation";
+import { Lightbulb } from "lucide-react";
 
 const LucesFormulario = () => {
   const router = useRouter();
   const [form, setForm] = useState({
     name: "",
     zone: "",
+    xcoordinate: "",
+    ycoordinate: "",
   });
+  const [coordenadas, setCoordenadas] = useState({ x: null, y: null });
+  const imageWidth = 800;
+  const imageHeight = 700;
+  const handleClick = (event) => {
+    const boundingRect = event.target.getBoundingClientRect();
+    // Obtener las coordenadas del clic
+    const x = event.clientX - boundingRect.left;
+    const y = event.clientY - boundingRect.top;
+
+    // Actualizar el estado con las coordenadas
+    setCoordenadas({ x, y });
+    setForm({ ...form, xcoordinate: x, ycoordinate: y });
+  };
   // Mensaje de verificacion
   const [message, setMessage] = useState("");
   // Validacion formulario
@@ -192,7 +208,35 @@ const LucesFormulario = () => {
             </li>
           </ul>
         </div>
-
+        <div style={{ position: "relative", display: "inline-block" }}>
+          <img
+            src="/planocasa.png"
+            alt="Imagen"
+            onClick={handleClick}
+            style={{
+              cursor: "crosshair",
+              width: imageWidth,
+              height: imageHeight,
+            }} // Cambiar el cursor para indicar que es clickeable
+          />
+          {coordenadas.x !== null && coordenadas.y !== null && (
+            <Lightbulb size={25} className="text-green-800"
+              style={{
+                position: "absolute",
+                left: coordenadas.x, 
+                top: coordenadas.y, 
+                zIndex: 999,
+              }}
+            />
+          )}
+        </div>
+        <div className="p-8 mt-5 text-blue-600">
+          <p className="font-bold">
+            {" "}
+            Coordenadas:
+            {form.xcoordinate}, {form.ycoordinate}
+          </p>
+        </div>
         <button
           type="submit"
           className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"

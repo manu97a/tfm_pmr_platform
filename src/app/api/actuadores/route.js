@@ -14,8 +14,10 @@ export async function POST(req) {
     const data = await req.json();
     const actuador = new Actuadores(data);
     await actuador.save();
+
     return NextResponse.json(actuador);
   } catch (error) {
     return NextResponse.json(error);
   }
 }
+

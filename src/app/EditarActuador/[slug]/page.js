@@ -1,14 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-
-const EditarActuador = ({params}) => {
+import CirclePower from "lucide-react";
+const EditarActuador = ({ params }) => {
   const router = useRouter();
   const { slug } = params;
   const [dataActual, setDataActual] = useState({});
+  const [coordenadas, setCoordenadas] = useState({ x: null, y: null });
+  const imageWidth = 800;
+  const imageHeight = 700;
   const [formData, setFormData] = useState({
     name: "",
     zone: "",
+    xcoordinate: "",
+    ycoordinate: "",
   });
   const [message, setMessage] = useState("");
   const handleChange = (e) => {
@@ -17,6 +22,16 @@ const EditarActuador = ({params}) => {
       ...formData,
       [name]: value,
     });
+  };
+  const handleClick = (event) => {
+    const boundingRect = event.target.getBoundingClientRect();
+    // Obtener las coordenadas del clic
+    const x = event.clientX - boundingRect.left;
+    const y = event.clientY - boundingRect.top;
+
+    // Actualizar el estado con las coordenadas
+    setCoordenadas({ x, y });
+    setFormData({ ...formData, xcoordinate: x, ycoordinate: y });
   };
   useEffect(() => {
     const infoActuador = async () => {
@@ -61,8 +76,9 @@ const EditarActuador = ({params}) => {
       setMessage(`Ocurrió un error al editar el actuador `);
     }
   };
-  return <>
-  <div className="container max-w-full mx-auto text-center bg-gray-50">
+  return (
+    <>
+      <div className="container max-w-full mx-auto text-center bg-gray-50">
         <h3 className="text-blue-700 text-2xl p-5">
           Datos actuales del actuador
         </h3>
@@ -75,8 +91,32 @@ const EditarActuador = ({params}) => {
           </div>
           <div className="bg-gray-50 rounded-xl border border-blue-700">
             <p className="p-8">
-              Ubicación: <span className="font-bold ml-3">{dataActual.zone}</span>
+              Ubicación:{" "}
+              <span className="font-bold ml-3">{dataActual.zone}</span>
             </p>
+          </div>
+          <div className="bg-gray-50 rounded-xl border border-blue-700">
+            <p className="p-8">
+              Coordenadas Actuales:{" "}</p>
+              <div className="flex flex-col text-blue-600 p-4">
+                <div>
+                  <p className="font-bold">
+                    X:{" "}
+                    <span className=" text-gray-500">
+                      {dataActual.xcoordinate}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <p className="font-bold">
+                    Y:{" "}
+                    <span className=" text-gray-500">
+                      {dataActual.ycoordinate}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            
           </div>
         </div>
         {/* FORMULARIO PARA EDITAR EL SENSOR */}
@@ -225,6 +265,56 @@ const EditarActuador = ({params}) => {
                 </li>
               </ul>
             </div>
+            <div className="text-blue-600 text-xl font-light mb-2">
+              <p>Selecciona en el mapa la nueva ubicación</p>
+            </div>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <img
+                src="/planocasa.png"
+                alt="Imagen"
+                onClick={handleClick}
+                style={{
+                  cursor: "crosshair",
+                  width: imageWidth,
+                  height: imageHeight,
+                }} // Cambiar el cursor para indicar que es clickeable
+              />
+              {coordenadas.x !== null && coordenadas.y !== null && (
+                <div
+                  style={{
+                    position: "absolute",
+                    left: coordenadas.x, // Ajusta el desplazamiento para que el círculo esté centrado
+                    top: coordenadas.y, // Ajusta el desplazamiento para que el círculo esté centrado
+                    width: "10px",
+                    height: "10px",
+                    borderRadius: "50%",
+                    backgroundColor: "red",
+                    zIndex: 999, // Asegura que el círculo esté por encima de la imagen
+                  }}
+                />
+              )}
+            </div>
+            
+            <div className="p-8 mt-5 text-blue-600">
+              <div className="flex flex-col">
+                <div>
+                  <p>
+                    x:{" "}
+                    <span className="text-gray-600">
+                      {formData.xcoordinate}
+                    </span>
+                  </p>
+                </div>
+                <div>
+                  <p>
+                    y:{" "}
+                    <span className="text-gray-600">
+                      {formData.ycoordinate}
+                    </span>
+                  </p>
+                </div>
+              </div>
+            </div>
 
             <button
               type="submit"
@@ -236,8 +326,8 @@ const EditarActuador = ({params}) => {
           </form>
         </div>
       </div>
-
-  </>;
+    </>
+  );
 };
 
 export default EditarActuador;
