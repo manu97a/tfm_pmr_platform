@@ -1,6 +1,9 @@
 "use client";
+import ListaActuadores from "@/components/ListaActuadores";
+import ListaLuces from "@/components/ListaLuces";
 import MapaActuadores from "@/components/MapaActuadores";
 import Mapper from "@/components/Mapper";
+import SetSimulation from "@/components/SetSimulation";
 import React, { useState, useEffect } from "react";
 
 const Mapa = () => {
@@ -19,8 +22,10 @@ const Mapa = () => {
 
   return (
     <div className="container mx-auto text-center">
-      <h1>Ubicación de dispositivos</h1>
+      
       {isDataLoaded && (<MapaActuadores/>)}
+      <ListaActuadores/>
+      <ListaLuces/>
       
     </div>
   );

@@ -211,6 +211,10 @@ const ActuadorFormulario = () => {
             </li>
           </ul>
         </div>
+        <h3 className="block text-blue-600 text-xl font-light mb-2">
+          Ubica en el mapa tu actuador, haz click en donde está ubicado:
+        </h3>
+
         <div style={{ position: "relative", display: "inline-block" }}>
           <img
             src="/planocasa.png"
@@ -236,7 +240,6 @@ const ActuadorFormulario = () => {
               }}
             />
           )}
-          
         </div>
 
         <div className="p-8 mt-5 text-blue-600">

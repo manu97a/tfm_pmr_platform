@@ -217,7 +217,7 @@ const LucesFormulario = () => {
               cursor: "crosshair",
               width: imageWidth,
               height: imageHeight,
-            }} // Cambiar el cursor para indicar que es clickeable
+            }} 
           />
           {coordenadas.x !== null && coordenadas.y !== null && (
             <Lightbulb size={25} className="text-green-800"

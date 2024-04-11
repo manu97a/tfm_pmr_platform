@@ -1,13 +1,19 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { Lightbulb } from "lucide-react";
 const EditarLuz = ({ params }) => {
   const router = useRouter();
   const { slug } = params;
   const [dataActual, setDataActual] = useState({});
+  const [coordenadas, setCoordenadas] = useState({ x: null, y: null });
+  const imageWidth = 800;
+  const imageHeight = 700;
   const [formData, setFormData] = useState({
     name: "",
     zone: "",
+    xcoordinate: "",
+    ycoordinate: "",
   });
   const [message, setMessage] = useState("");
   const handleChange = (e) => {
@@ -16,6 +22,16 @@ const EditarLuz = ({ params }) => {
       ...formData,
       [name]: value,
     });
+  };
+  const handleClick = (event) => {
+    const boundingRect = event.target.getBoundingClientRect();
+    // Obtener las coordenadas del clic
+    const x = event.clientX - boundingRect.left;
+    const y = event.clientY - boundingRect.top;
+
+    // Actualizar el estado con las coordenadas
+    setCoordenadas({ x, y });
+    setFormData({ ...formData, xcoordinate: x, ycoordinate: y });
   };
   useEffect(() => {
     const infoLuces = async () => {
@@ -63,9 +79,7 @@ const EditarLuz = ({ params }) => {
   return (
     <>
       <div className="container max-w-full mx-auto text-center bg-gray-50">
-        <h3 className="text-blue-700 text-2xl p-5">
-          Datos actuales de la luz
-        </h3>
+        <h3 className="text-blue-700 text-2xl p-5">Datos actuales de la luz</h3>
         <div className="grid lg:grid-cols-2 gap-4 p-5 md:grid-cols-2 sm:grid-cols-1">
           <div className="bg-gray-50 rounded-xl border border-blue-700">
             <p className="p-8">
@@ -78,6 +92,27 @@ const EditarLuz = ({ params }) => {
               Ubicación de la luz:{" "}
               <span className="font-bold ml-3">{dataActual.zone}</span>
             </p>
+          </div>
+          <div className="bg-gray-50 rounded-xl border border-blue-700">
+            <p className="p-8">Coordenadas Actuales: </p>
+            <div className="flex flex-col text-blue-600 p-4">
+              <div>
+                <p className="font-bold">
+                  X:{" "}
+                  <span className=" text-gray-500">
+                    {dataActual.xcoordinate}
+                  </span>
+                </p>
+              </div>
+              <div>
+                <p className="font-bold">
+                  Y:{" "}
+                  <span className=" text-gray-500">
+                    {dataActual.ycoordinate}
+                  </span>
+                </p>
+              </div>
+            </div>
           </div>
         </div>
         {/* FORMULARIO PARA EDITAR EL SENSOR */}
@@ -226,14 +261,42 @@ const EditarLuz = ({ params }) => {
                 </li>
               </ul>
             </div>
-
-            <button
-              type="submit"
-              className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
-            >
-              Editar Luz
-            </button>
-            <p className="text-red-500">{message}</p>
+            <div className="text-blue-600 text-xl font-light mb-2">
+              <p>Selecciona en el mapa la nueva ubicación</p>
+            </div>
+            <div style={{ position: "relative", display: "inline-block" }}>
+              <img
+                src="/planocasa.png"
+                alt="Imagen"
+                onClick={handleClick}
+                style={{
+                  cursor: "crosshair",
+                  width: imageWidth,
+                  height: imageHeight,
+                }} // Cambiar el cursor para indicar que es clickeable
+              />
+              {coordenadas.x !== null && coordenadas.y !== null && (
+                <Lightbulb
+                  size={25}
+                  className="text-green-800"
+                  style={{
+                    position: "absolute",
+                    left: coordenadas.x,
+                    top: coordenadas.y,
+                    zIndex: 999,
+                  }}
+                />
+              )}
+            </div>
+            <div>
+              <button
+                type="submit"
+                className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+              >
+                Editar Luz
+              </button>
+              <p className="text-red-500">{message}</p>
+            </div>
           </form>
         </div>
       </div>

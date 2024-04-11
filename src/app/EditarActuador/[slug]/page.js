@@ -98,7 +98,7 @@ const EditarActuador = ({ params }) => {
           <div className="bg-gray-50 rounded-xl border border-blue-700">
             <p className="p-8">
               Coordenadas Actuales:{" "}</p>
-              <div className="flex flex-col text-blue-600 p-4">
+              <div className="flex flex-col text-blue-600">
                 <div>
                   <p className="font-bold">
                     X:{" "}

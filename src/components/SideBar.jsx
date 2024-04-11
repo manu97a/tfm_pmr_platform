@@ -30,7 +30,7 @@ export default function Sidebar({ children }) {
           </SidebarContext.Provider>
 
           <div className="border-t flex p-3">
-            <img src="./Fernando.png" className="w-10 h-10 rounded-md" />
+            <img src="./Fernando.png" className="w-10 h-10 rounded-md" alt="Miniicon" />
             <div
               className={`flex justify-between items-center overflow-hidden transition-all ${
                 expanded ? "w-52 ml-3" : "w-0"

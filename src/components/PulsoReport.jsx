@@ -3,9 +3,11 @@ import React, { useEffect, useState, useRef } from "react";
 import Chart from "chart.js/auto";
 import Annotation from "chartjs-plugin-annotation";
 import { LuAlertTriangle } from "react-icons/lu";
+import zoomPlugin from "chartjs-plugin-zoom";
 import Link from "next/link";
 Chart.register(Annotation);
-Chart.defaults.font.size = 20;
+Chart.register(zoomPlugin);
+Chart.defaults.font.size = 10;
 const PulsoReport = () => {
   const [pulsoData, setPulsoData] = useState([]);
   const [umbral, setUmbral] = useState([]);
@@ -87,6 +89,21 @@ const PulsoReport = () => {
               },
             },
             plugins: {
+              zoom: {
+                zoom: {
+                  wheel: {
+                    enabled: true,
+                  },
+                  pinch: {
+                    enabled: true,
+                  },
+                  mode: "x", // Enable both horizontal and vertical zooming
+                },
+                pan: {
+                  enabled: true,
+                  mode: "x", // Enable both horizontal and vertical panning
+                },
+              },
               annotation: {
                 annotations: {
                   line1: {
@@ -156,7 +173,6 @@ const PulsoReport = () => {
             ))}
           </ol>
         </div>
-      
       </div>
     </div>
   );
