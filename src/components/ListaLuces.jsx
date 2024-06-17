@@ -36,6 +36,26 @@ const ListaLuces = () => {
       console.log("Error al eliminar la luz", error);
     }
   };
+  const handleEliminarTodos = async () => {
+    try {
+      const response = await fetch("api/luces", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Todos las luces han sido eliminadas");
+        window.location.reload();
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error al eliminar las luces", error);
+      alert("Error al eliminar las luces. Intenta nuevamente");
+    }
+  };
   useEffect(() => {
     const client = mqtt.connect("ws://test.mosquitto.org:8080/mqtt");
     client.on("connect", () => {
@@ -87,7 +107,8 @@ const ListaLuces = () => {
     } else {
       return (
         <div role="status">
-          <svg
+          <LuLightbulb size={70} className="text-gray-600 opacity-50" />
+          {/* <svg
             aria-hidden="true"
             className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
             viewBox="0 0 100 101"
@@ -103,7 +124,7 @@ const ListaLuces = () => {
               fill="currentFill"
             />
           </svg>
-          <span className="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span> */}
         </div>
       );
     }
@@ -144,6 +165,12 @@ const ListaLuces = () => {
           >
             Agregar nueva Luz
           </Link>
+          <button
+            onClick={handleEliminarTodos}
+            className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            Eliminar todos
+          </button>
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-8 place-items-center">
             {luces.map((luz, index) => (
               <div

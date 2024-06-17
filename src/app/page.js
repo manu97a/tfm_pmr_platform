@@ -9,6 +9,7 @@ import Link from "next/link";
 import ListaSensores from "./ListaSensores/page";
 import SensorsPlots from "@/components/SensorsPlots";
 import Ubicacion from "@/components/Ubicacion";
+import ListaPerfiles from "@/components/ListaPerfiles";
 // import Mapa from "@/components/Mapadelacasa";
 
 export default function Home() {
@@ -25,6 +26,7 @@ export default function Home() {
         <ListaActuadores />
         <ListaLuces />
         <ListaSensores />
+        <ListaPerfiles/>
         {/* <SensorsPlots/> */}
 
         {/* <ActuadorMQTT/> */}

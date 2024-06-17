@@ -53,7 +53,7 @@ const SaturacionReport = () => {
   useEffect(() => {
     if (grafica) {
       var filtradoAlertas = saturacionData.filter(
-        (item) => item.value > umbral
+        (item) => item.value < umbral
       );
       setAlertasSaturacion(filtradoAlertas);
       const ctx = chartRef.current.getContext("2d");

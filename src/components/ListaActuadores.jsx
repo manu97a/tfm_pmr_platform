@@ -84,9 +84,10 @@ const ListaActuadores = () => {
     } else {
       return (
         <div role="status">
-          <svg
+          <PiPowerFill size={70} className="text-gray-600 opacity-50" />
+          {/* <svg
             aria-hidden="true"
-            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-blue-600"
+            className="w-8 h-8 text-gray-200 animate-spin dark:text-gray-600 fill-red-600"
             viewBox="0 0 100 101"
             fill="none"
             xmlns="http://www.w3.org/2000/svg"
@@ -100,9 +101,30 @@ const ListaActuadores = () => {
               fill="currentFill"
             />
           </svg>
-          <span className="sr-only">Loading...</span>
+          <span className="sr-only">Loading...</span> */}
         </div>
       );
+    }
+  };
+
+  const handleEliminarActuadores = async () => {
+    try {
+      const response = await fetch("api/actuadores", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Todos los actuadores han sido eliminados");
+        window.location.reload();
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error al eliminar los actuadores", error);
+      alert("Error al eliminar los actuadores. Intenta nuevamente");
     }
   };
   return (
@@ -141,6 +163,12 @@ const ListaActuadores = () => {
           >
             Agregar nuevo actuador
           </Link>
+          <button
+            onClick={handleEliminarActuadores}
+            className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+          >
+            Eliminar todos
+          </button>
           <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 m-8 place-items-center">
             {actuadores.map((actuador, index) => (
               <div

@@ -90,7 +90,7 @@ export default function RootLayout({ children }) {
             <SidebarItem
               icon={<PersonStanding size={20} />}
               link={"/Mapa"}
-              text="Simulación Automática"
+              text="Simulación"
             ></SidebarItem>
           </SideBar>
 

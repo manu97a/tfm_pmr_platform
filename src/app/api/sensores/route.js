@@ -16,7 +16,19 @@ export async function POST(req) {
     await sensor.save();
     return NextResponse.json(sensor);
   } catch (error) {
-    return NextResponse.json(error)
+    return NextResponse.json(error);
   }
   //
+}
+export async function DELETE() {
+  await conexionDB();
+  try {
+    const result = await Sensor.deleteMany({});
+    return NextResponse.json({
+      message: "Todos los sensores han sido eliminados",
+      result,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
 }

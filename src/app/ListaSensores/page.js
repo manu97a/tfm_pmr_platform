@@ -30,6 +30,25 @@ const ListaSensores = () => {
       console.log("Error al eliminar el sensor", error);
     }
   };
+  const handleEliminarTodosLosSensores = async () => {
+    try {
+      const response = await fetch("api/sensores", {
+        method: "DELETE",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      const data = await response.json();
+      if (response.ok) {
+        alert("Todos los sensores han sido eliminados");
+      } else {
+        alert(`Error: ${data.error}`);
+      }
+    } catch (error) {
+      console.error("Error al eliminar los sensores", error);
+      alert("Error al eliminar los sensores. Intenta nuevamente");
+    }
+  };
   return (
     <div className="container mx-auto rounded-xl m-8 text-center w-full bg-blue-600 text-white font-light p-8">
       <h3 className="text-3xl py-5">Lista de sensores</h3>
@@ -40,6 +59,12 @@ const ListaSensores = () => {
         >
           Agregar nuevo sensor
         </Link>
+        <button
+          onClick={handleEliminarTodosLosSensores}
+          className="py-2.5 px-5 me-2 mb-2 text-sm font-medium text-gray-900 focus:outline-none bg-white rounded-lg border border-gray-200 hover:bg-gray-100 hover:text-blue-700 focus:z-10 focus:ring-4 focus:ring-gray-100 dark:focus:ring-gray-700 dark:bg-gray-800 dark:text-gray-400 dark:border-gray-600 dark:hover:text-white dark:hover:bg-gray-700"
+        >
+          Eliminar todos
+        </button>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 ">
         {sensores.map((sensor, index) => (

@@ -21,3 +21,15 @@ export async function POST(req) {
   }
 }
 
+export async function DELETE() {
+  await conexionDB();
+  try {
+    const result = await Actuadores.deleteMany({});
+    return NextResponse.json({
+      message: "Todos los actuadores han sido eliminados",
+      result,
+    });
+  } catch (error) {
+    return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
